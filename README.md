@@ -5,16 +5,16 @@ In your group, you will collaborate on the creation of a website built using Git
 Your website can be about one of the following topics, or your teacher may give you a topic for the website.
 
 <details><summary>History of Programming</summary>
-Each group member should choose a different programming language and create a page that details the key characteristics of the language, its development history, and key influences on the language. Sources for each page should be cited.
-
-The site should include a 'timeline' page that each member contributes to. The 'timeline' page should have each programming language listed in the correct time-slot, linking to that language's page.
+    
+- Each group member should choose a different programming language and create a page that details the key characteristics of the language, its development history, and key influences on the language. Sources for each page should be cited.
+- The site should include a 'timeline' page that each member contributes to. The 'timeline' page should have each programming language listed in the correct time-slot, linking to that language's page.
 
 </details>
 
 <details><summary>Cloud Computing</summary>
-Each group member should choose one of either: a key characteristics of cloud computing OR a service model used in cloud computing. They should create a page that describes the characteristic or service model they have chosen.
 
-The site should also include a 'cloud services' page that each member contributes to. This page should give an overview of the services offered by the major cloud providers, highlighting the key services offered per service type.
+- Each group member should choose one of either: a key characteristics of cloud computing OR a service model used in cloud computing. They should create a page that describes the characteristic or service model they have chosen.
+- The site should also include a 'cloud services' page that each member contributes to. This page should give an overview of the services offered by the major cloud providers, highlighting the key services offered per service type.
 
 </details>
 
