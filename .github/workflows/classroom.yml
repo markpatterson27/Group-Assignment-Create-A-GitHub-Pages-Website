@@ -81,3 +81,8 @@ jobs:
         id: autograding
         continue-on-error: true
 
+    outputs:
+      grading-score: ${{ steps.autograder.outputs.Points }}
+      activity1-result: ${{ steps.activity1.outputs.result }}
+      activity1-url: ${{ steps.activity1.outputs.url }}
+
