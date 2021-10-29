@@ -24,4 +24,5 @@ jobs:
       - uses: education/autograding@v1
         name: "** Grading and Feedback **"
         id: autograding
+        continue-on-error: true
 
