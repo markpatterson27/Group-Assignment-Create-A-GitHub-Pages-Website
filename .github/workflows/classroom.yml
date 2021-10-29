@@ -86,3 +86,35 @@ jobs:
       activity1-result: ${{ steps.activity1.outputs.result }}
       activity1-url: ${{ steps.activity1.outputs.url }}
 
+  # job to build activity status icons and update pages URL
+  update-activity-status:
+    name: Update Activity Statuses
+    runs-on: ubuntu-latest
+    if: always()
+    needs: build
+    steps:
+      # need to checkout whole repo
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # switch to main branch
+      - name: Switch to main branch
+        run: git checkout main
+
+      # update pages URL
+      - name: update Pages URL
+        if: ${{ needs.build.outputs.activity1-url != '' }}
+        run: |
+          replace="When enabled, your site will be available at: \`https:\/\/<org name>.github.io\/<repo name>\`"
+          with="Your site is available at: [${{ needs.build.outputs.activity1-url }}](${{ needs.build.outputs.activity1-url }})"
+          sed -i "s|^$replace|$with|g" README.md
+
+      # commit and push pages url if changed
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add README.md
+          git commit -m "Updated pages URL" || exit 0
+          git push origin main
