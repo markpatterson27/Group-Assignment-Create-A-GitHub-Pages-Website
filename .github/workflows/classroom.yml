@@ -40,6 +40,7 @@ jobs:
               console.log(`Get pages response: ${res.status}`);
 
               if (res.status == '200') {
+                console.log(`Found GitHub Pages site`)
                 pageURL = res.data.html_url;
                 sourceBranch = res.data.source.branch;
                 sourcePath = res.data.source.path;
@@ -48,6 +49,11 @@ jobs:
                 console.log(`Source path  : ${sourcePath}`);
 
                 if (sourceBranch == 'main' && sourcePath == '/docs') {
+                  // write result to file
+                  const fs = require('fs');
+                  fs.writeFile('.github/results/activity1.txt', 'pass', function (err) {
+                    if (err) return console.log(err);
+                  });
                   result = 'success';
                 }
               }
