@@ -86,6 +86,64 @@ jobs:
       activity1-result: ${{ steps.activity1.outputs.result }}
       activity1-url: ${{ steps.activity1.outputs.url }}
 
+  # job to get repo info: default branch, feedback pr number
+  repo-info:
+    name: Get Repo Info
+    runs-on: ubuntu-latest
+    steps:
+      # pause to wait for classroom bot to setup feedback PR
+      - if: ${{ github.actor == 'github-classroom[bot]' }}
+        run: sleep 30
+
+      # Default branch is usually 'main', but in case it isn't get default branch name
+      - name: Get default branch name
+        uses: actions/github-script@v5
+        id: default-branch-name
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            // get default branch
+            const repo = await github.rest.repos.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+            console.log(`Get repo response - status: ${repo.status}`);
+            return repo.data.default_branch;
+          result-encoding: string
+      - run: echo "Default branch name - ${{ steps.default-branch-name.outputs.result }}"
+
+      # find PR if it exists
+      - name: Find PR number
+        uses: markpatterson27/find-pull-request-action@pre-pr-release
+        id: check-pr
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          title: Feedback
+          base: feedback
+          branch: ${{ steps.default-branch-name.outputs.result }}
+          state: all
+      - run: echo ${{ steps.check-pr.outputs.number }}
+
+      # re-open PR if closed
+      - name: Re-open PR
+        if: ${{ steps.check-pr.outputs.state == 'closed' }}
+        uses: actions/github-script@v5
+        env:
+            PR_NUMBER: ${{ steps.check-pr.outputs.number }}
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: process.env.PR_NUMBER,
+              state: 'open'
+            });
+
+    outputs:
+      default-branch-name: ${{ steps.default-branch-name.outputs.result }}
+      feedback-pr: ${{ steps.check-pr.outputs.number }}
+
   # job to build activity status icons and update pages URL
   update-activity-status:
     name: Update Activity Statuses
