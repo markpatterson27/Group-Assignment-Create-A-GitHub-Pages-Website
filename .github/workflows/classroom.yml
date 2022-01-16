@@ -186,6 +186,60 @@ jobs:
       # switch to status branch
       - run: git checkout status || git checkout -b status
 
+      # make dir for activity status icons
+      - name: make icons dir
+        run: mkdir -p .github/activity-icons
+
+      # make/copy activity 1 icon
+      - name: activity 1 icon
+        run: |
+          echo ${{ needs.grade.outputs.activity1-result }}
+          if ${{ needs.grade.outputs.activity1-result == 'success' }}; then
+            cp .github/templates/activity-completed.svg .github/activity-icons/activity1.svg
+          else
+            cp .github/templates/activity-incomplete.svg .github/activity-icons/activity1.svg
+          fi
+      
+      # make/copy activity 2 icon
+      - name: activity 2 icon
+        run: |
+          echo ${{ needs.grade.outputs.activity2-result }}
+          if ${{ needs.grade.outputs.activity2-result == 'success' }}; then
+            cp .github/templates/activity-completed.svg .github/activity-icons/activity2.svg
+          else
+            cp .github/templates/activity-incomplete.svg .github/activity-icons/activity2.svg
+          fi
+
+      # make/copy activity 3 icon
+      - name: activity 3 icon
+        run: |
+          echo ${{ needs.grade.outputs.activity3-result }}
+          if ${{ needs.grade.outputs.activity3-result == 'success' }}; then
+            cp .github/templates/activity-completed.svg .github/activity-icons/activity3.svg
+          else
+            cp .github/templates/activity-incomplete.svg .github/activity-icons/activity3.svg
+          fi
+
+      # make/copy activity 4 icon
+      - name: activity 4 icon
+        run: |
+          echo ${{ needs.grade.outputs.activity4-result }}
+          if ${{ needs.grade.outputs.activity4-result == 'success' }}; then
+            cp .github/templates/activity-completed.svg .github/activity-icons/activity4.svg
+          else
+            cp .github/templates/activity-incomplete.svg .github/activity-icons/activity4.svg
+          fi
+
+      # make/copy activity 5 icon
+      - name: activity 5 icon
+        run: |
+          echo ${{ needs.grade.outputs.activity5-result }}
+          if ${{ needs.grade.outputs.activity5-result == 'success' }}; then
+            cp .github/templates/activity-completed.svg .github/activity-icons/activity5.svg
+          else
+            cp .github/templates/activity-incomplete.svg .github/activity-icons/activity5.svg
+          fi
+
       # create points bar
       - name: points bar
         uses: markpatterson27/points-bar@v1
