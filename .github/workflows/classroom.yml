@@ -149,7 +149,7 @@ jobs:
     name: Update Activity Statuses
     runs-on: ubuntu-latest
     if: always()
-    needs: grade
+    needs: [grade, repo-info]
     steps:
       # need to checkout whole repo
       - uses: actions/checkout@v2
@@ -158,7 +158,7 @@ jobs:
 
       # switch to main branch
       - name: Switch to main branch
-        run: git checkout main
+        run: git checkout ${{ needs.repo-info.outputs.default-branch-name }}
 
       # update pages URL
       - name: update Pages URL
@@ -175,4 +175,4 @@ jobs:
           git config --local user.name "GitHub Action"
           git add README.md
           git commit -m "Updated pages URL" || exit 0
-          git push origin main
+          git push origin ${{ needs.repo-info.outputs.default-branch-name }}
