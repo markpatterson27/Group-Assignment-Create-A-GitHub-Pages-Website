@@ -12,7 +12,7 @@ on:
 
 jobs:
   # job to run autograding
-  build:
+  grade:
     name: Autograding
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -21,7 +21,7 @@ jobs:
 
       # test activity 1 - enable gh pages
       - uses: actions/github-script@v5
-        name: "Check Activity 1"
+        name: "Check Activity 1 - Enable GH Pages"
         id: activity1
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
@@ -91,7 +91,7 @@ jobs:
     name: Update Activity Statuses
     runs-on: ubuntu-latest
     if: always()
-    needs: build
+    needs: grade
     steps:
       # need to checkout whole repo
       - uses: actions/checkout@v2
@@ -104,10 +104,10 @@ jobs:
 
       # update pages URL
       - name: update Pages URL
-        if: ${{ needs.build.outputs.activity1-url != '' }}
+        if: ${{ needs.grade.outputs.activity1-url != '' }}
         run: |
           replace="When enabled, your site will be available at: \`https:\/\/<org name>.github.io\/<repo name>\`"
-          with="Your site is available at: [${{ needs.build.outputs.activity1-url }}](${{ needs.build.outputs.activity1-url }})"
+          with="Your site is available at: [${{ needs.grade.outputs.activity1-url }}](${{ needs.grade.outputs.activity1-url }})"
           sed -i "s|^$replace|$with|g" README.md
 
       # commit and push pages url if changed
