@@ -19,6 +19,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      # delete and recreate result dir
+      - name: Reset results dir
+        run: |
+          rm -rf .github/results
+          mkdir -p .github/results
+
       # test activity 1 - enable gh pages
       - uses: actions/github-script@v5
         name: "Check Activity 1 - Enable GH Pages"
