@@ -182,3 +182,22 @@ jobs:
           git add README.md
           git commit -m "Updated pages URL" || exit 0
           git push origin ${{ needs.repo-info.outputs.default-branch-name }}
+
+      # switch to status branch
+      - run: git checkout status || git checkout -b status
+
+      # create points bar
+      - name: points bar
+        uses: markpatterson27/points-bar@v1
+        with:
+          points: ${{ needs.grade.outputs.grading-score }}
+          path: '.github/activity-icons/points-bar.svg'
+
+      # commit and push activity icons if statuses have changed
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add '.github/activity-icons'
+          git commit -m "Add/Update activity icons" || exit 0
+          git push origin status

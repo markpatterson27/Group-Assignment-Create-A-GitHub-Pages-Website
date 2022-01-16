@@ -1,5 +1,7 @@
 # Group Assignment - Create A GitHub Pages Website
 
+<img alt="points bar" align="right" height="36" src="../../blob/status/.github/activity-icons/points-bar.svg" />
+
 In your group, you will collaborate on the creation of a website built using GitHub Pages.
 
 Your website can be about one of the following topics, or your teacher may give you a topic for the website.
