@@ -130,7 +130,7 @@ jobs:
     outputs:
       grading-score: ${{ steps.autograding.outputs.Points }}
       activity1-result: ${{ steps.activity1.outputs.result }}
-      activity1-url: ${{ steps.activity1.outputs.url }}
+      pages-url: ${{ steps.activity1.outputs.url }}
 
   # job to get repo info: default branch, feedback pr number
   repo-info:
@@ -208,15 +208,15 @@ jobs:
 
       # update pages URL
       - name: update Pages URL
-        if: ${{ needs.grade.outputs.activity1-url != '' }}
+        if: ${{ needs.grade.outputs.pages-url != '' }}
         run: |
           replace="When enabled, your site will be available at: \`https:\/\/<org name>.github.io\/<repo name>\`"
-          with="Your site is available at: [${{ needs.grade.outputs.activity1-url }}](${{ needs.grade.outputs.activity1-url }})"
+          with="Your site is available at: [${{ needs.grade.outputs.pages-url }}](${{ needs.grade.outputs.pages-url }})"
           sed -i "s|^$replace|$with|g" README.md
 
       # un-update pages URL if gh pages disabled after enabling
       - name: un-update Pages URL
-        if: ${{ needs.grade.outputs.activity1-url == '' }}
+        if: ${{ needs.grade.outputs.pages-url == '' }}
         run: |
           IFS='/' read -ra repoArray <<< "$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')"
           replace="Your site is available at: \[https:\/\/${repoArray[0]}.github.io\/${repoArray[1]}\/\](https:\/\/${repoArray[0]}.github.io\/${repoArray[1]}\/)"
