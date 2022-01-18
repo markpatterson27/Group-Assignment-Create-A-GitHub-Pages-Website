@@ -131,6 +131,9 @@ jobs:
       grading-score: ${{ steps.autograding.outputs.Points }}
       activity1-result: ${{ steps.activity1.outputs.result }}
       pages-url: ${{ steps.activity1.outputs.url }}
+      pages-branch: ${{steps.activity1.outputs.branch}}
+      pages-path: ${{steps.activity1.outputs.path}}
+      team-members: ${{steps.team-members.outputs.result}}
 
   # job to get repo info: default branch, feedback pr number
   repo-info:
@@ -304,3 +307,84 @@ jobs:
           git add '.github/activity-icons'
           git commit -m "Add/Update activity icons" || exit 0
           git push origin status
+
+  # job to post feedback message in Feedback PR
+  # Classroom will create the PR when assignment accepted. PR should be issue 1.
+  post-feedback:
+    name: Post Feedback Comment
+    runs-on: ubuntu-latest
+    # run even if autograding fails. only run on main branch and if pr exists.
+    if: ${{ always() && needs.repo-info.outputs.feedback-pr != '' && github.ref == 'refs/heads/main' && github.actor != 'github-classroom[bot]' }}
+    needs: [grade, repo-info]
+    steps:
+      # checkout files so can access template
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # read template
+      - uses: markpatterson27/markdown-to-output@v1
+        id: mto
+        with:
+          filepath: .github/templates/pr_feedback.md
+
+      # set feedback var
+      # activity 1 feedback
+      - name: activity 1 feedback
+        run: |
+          if ${{ needs.grade.outputs.activity1-result == 'success' }}; then
+            message="${{ steps.mto.outputs.activity1-success }}"
+            status="${{ steps.mto.outputs.status-success }}"
+          else
+            if ${{ needs.grade.outputs.pages-url != '' }}; then
+              message="${{ steps.mto.outputs.activity1-fail-2 }}"
+            else
+              message="${{ steps.mto.outputs.activity1-fail }}"
+            fi
+            status="${{ steps.mto.outputs.status-fail }}"
+          fi
+          echo "fb-activity1=$(/bin/bash .github/scripts/escape.sh "$message")" >> $GITHUB_ENV
+          echo "status-activity1=$(/bin/bash .github/scripts/escape.sh "$status")" >> $GITHUB_ENV
+
+      # replace tokens
+      # read template file and replace tokens. token replacement based on env name.
+      - name: prepare comment and substitute tokens
+        id: prep
+        uses: actions/github-script@v5
+        env:
+          pages-url: ${{ needs.grade.outputs.pages-url }}
+          pages-branch: ${{ needs.grade.outputs.pages-branch }}
+          pages-path: ${{ needs.grade.outputs.pages-path }}
+          points: ${{ needs.grade.outputs.grading-score }}
+          template: ${{ steps.mto.outputs.body }}
+        with:
+          script: |
+            const fs = require('fs')
+            let commentBody = process.env.template
+
+            for (envName in process.env) {
+              commentBody = commentBody.replace("${"+envName+"}", process.env[envName]
+                .replace(/%0D/g, '\r')
+                .replace(/%0A/g, '\n')
+                .replace(/%25/g, '\%'))
+            }
+
+            return commentBody
+          result-encoding: string
+
+      # post comment on feedback PR. issues and PRs have same numbers
+      - name: post comment
+        uses: actions/github-script@v5
+        env:
+          MESSAGE: ${{ steps.prep.outputs.result }}
+          ISSUE: ${{ needs.repo-info.outputs.feedback-pr }}
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const { MESSAGE, ISSUE } = process.env
+            await github.rest.issues.createComment({
+              issue_number: process.env.ISSUE,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `${MESSAGE}`
+            })
