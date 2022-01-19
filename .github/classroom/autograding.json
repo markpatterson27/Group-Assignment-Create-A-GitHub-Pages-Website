@@ -29,6 +29,16 @@
         "comparison": "included",
         "timeout": 10,
         "points": 1
+      },
+      {
+        "name": "Activity 4 - Comment on PR",
+        "setup": "",
+        "run": "[ -e .github/results/activity4.txt ] && exit 0 || exit 1",
+        "input": "",
+        "output": "",
+        "comparison": "included",
+        "timeout": 10,
+        "points": 1
       }
     ]
 }
