@@ -39,6 +39,16 @@
         "comparison": "included",
         "timeout": 10,
         "points": 1
+      },
+      {
+        "name": "Activity 5 - Merge",
+        "setup": "",
+        "run": "[ -e .github/results/activity5.txt ] && exit 0 || exit 1",
+        "input": "",
+        "output": "",
+        "comparison": "included",
+        "timeout": 10,
+        "points": 1
       }
     ]
 }
