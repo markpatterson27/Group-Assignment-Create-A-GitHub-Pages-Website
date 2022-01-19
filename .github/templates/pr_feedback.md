@@ -51,6 +51,12 @@ activity2-fail: |
     git push origin main
     \`\`\`
   </details>
+activity3-success: Yay. Everyone in the team has opened a Pull Request.
+activity3-fail: |
+  Not everyone has opened a Pull Request. The following team members have not opened a Pull Request:
+  \${no-pr-members}
+
+  (See [Creating a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) for instructions on how to create a pull request.)
 ---
 
 ## Auto-Feedback
@@ -64,6 +70,10 @@ ${fb-activity1}
 #### ${status-activity2} Activity 2 - Make Commit
 
 ${fb-activity2}
+
+#### ${status-activity3} Activity 3 - Make Pull Request
+
+${fb-activity3}
 
 ### Team Members
 
