@@ -57,6 +57,10 @@ activity3-fail: |
   \${no-pr-members}
 
   (See [Creating a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) for instructions on how to create a pull request.)
+activity4-success: Everyone in the team has commented on someone else's Pull Request.
+activity4-fail: |
+  Not everyone has reviewed another's Pull Request. The following team members have not reviewed a Pull Request:
+  \${no-comment-members}
 ---
 
 ## Auto-Feedback
@@ -74,6 +78,10 @@ ${fb-activity2}
 #### ${status-activity3} Activity 3 - Make Pull Request
 
 ${fb-activity3}
+
+#### ${status-activity4} Activity 4 - Review Pull Request
+
+${fb-activity4}
 
 ### Team Members
 
