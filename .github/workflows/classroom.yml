@@ -699,6 +699,23 @@ jobs:
           echo "fb-activity4=$(/bin/bash .github/scripts/escape.sh "$message")" >> $GITHUB_ENV
           echo "status-activity4=$(/bin/bash .github/scripts/escape.sh "$status")" >> $GITHUB_ENV
 
+      # activity 5 feedback
+      - name: activity 5 feedback
+        run: |
+          if ${{ needs.grade.outputs.activity5-result == 'success' }}; then
+            message="${{ steps.mto.outputs.activity5-success }}"
+            status="${{ steps.mto.outputs.status-success }}"
+          else
+            message="${{ steps.mto.outputs.activity5-fail }}"
+            status="${{ steps.mto.outputs.status-fail }}"
+
+            IFS=',][' read -ra teamMembers <<< "${{ needs.grade.outputs.no-merges }}"
+            members="$(printf -- "- %s\n" "${teamMembers[@]:1}")"
+            echo "no-merge-members=$(/bin/bash .github/scripts/escape.sh "$members")" >> $GITHUB_ENV
+          fi
+          echo "fb-activity5=$(/bin/bash .github/scripts/escape.sh "$message")" >> $GITHUB_ENV
+          echo "status-activity5=$(/bin/bash .github/scripts/escape.sh "$status")" >> $GITHUB_ENV
+
       # list team members
       - name: list team members
         run: |
@@ -736,7 +753,7 @@ jobs:
             }
 
             // additional env re-replace
-            activityMessageEnv = ["no-commit-members", "no-pr-members", "no-comment-members"]
+            activityMessageEnv = ["no-commit-members", "no-pr-members", "no-comment-members", "no-merge-members"]
             for (envName of activityMessageEnv) {
               commentBody = commentBody.replace("${"+envName+"}", process.env[envName]
                 .replace(/%0D/g, '\r')
