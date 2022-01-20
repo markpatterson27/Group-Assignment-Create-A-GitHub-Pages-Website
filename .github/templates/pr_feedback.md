@@ -97,4 +97,8 @@ ${team-members}
 
 #### Contribution Stats
 
+| Member | Commits | Commits % | Lines | Lines % | Overall |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+${team-stats}
+
 Autograding Score: ${points}

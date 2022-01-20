@@ -738,7 +738,7 @@ jobs:
     runs-on: ubuntu-latest
     # run even if autograding fails. only run on main branch and if pr exists.
     if: ${{ always() && needs.repo-info.outputs.feedback-pr != '' && github.ref == 'refs/heads/main' && github.actor != 'github-classroom[bot]' }}
-    needs: [grade, repo-info]
+    needs: [grade, repo-info, repo-stats]
     steps:
       # checkout files so can access template
       - uses: actions/checkout@v2
@@ -850,6 +850,55 @@ jobs:
           # members="$(printf -- "- %s\n" "${teamMembers[@]:1}")"
           echo "team-members=$(/bin/bash .github/scripts/escape.sh "$members")" >> $GITHUB_ENV
 
+      # generate team member stats
+      - name: generate member stats
+        id: member-stats
+        uses: actions/github-script@v5
+        env:
+          MEMBERS: ${{ needs.grade.outputs.team-members }}
+          USERSTATS: ${{ needs.repo-stats.outputs.user-stats }}
+        with:
+          script: |
+            const members = JSON.parse(process.env.MEMBERS);
+            const userStats = JSON.parse(process.env.USERSTATS);
+
+            let memberStats = {};
+            for (const member of members) {
+              memberStats[member] = {};
+              memberStats[member]['commits'] = (userStats[member]) ? userStats[member].commits : 0;
+              memberStats[member]['linecount'] = (userStats[member]) ? userStats[member].linecount : 0;
+            }
+
+            // calc overall geomean
+            for (const k in memberStats){
+              const overall = Math.sqrt(memberStats[k].commits * memberStats[k].linecount / 10);
+              memberStats[k]['overall'] = overall;
+            }
+            console.log(memberStats);
+
+            // calc totals
+            const totals = Object.keys(memberStats).reduce((r,a) => {
+              e = memberStats[a];
+              for (k in e) {
+                r[k] = (r[k]) ? r[k] + e[k] : e[k];
+              }
+              return r;
+            }, {});
+            console.log(totals);
+
+            let tableBody = "";
+            for (const e in memberStats){
+              const commits = memberStats[e].commits;
+              const commitsP = (memberStats[e].commits*100/totals.commits).toFixed(2);
+              const lines = memberStats[e].linecount;
+              const linesP = (memberStats[e].linecount*100/totals.linecount).toFixed(2);
+              const overall = (memberStats[e].overall*100/totals.overall).toFixed(2);
+
+              tableBody += `| ${e} | ${commits} | ${commitsP}% | ${lines} | ${linesP}% | ${overall}% |\n`;
+            }
+            return tableBody
+          result-encoding: string
+
       # replace tokens
       # read template file and replace tokens. token replacement based on env name.
       - name: prepare comment and substitute tokens
@@ -861,6 +910,7 @@ jobs:
           pages-path: ${{ needs.grade.outputs.pages-path }}
           points: ${{ needs.grade.outputs.grading-score }}
           template: ${{ steps.mto.outputs.body }}
+          team-stats: ${{ steps.member-stats.outputs.result }}
         with:
           script: |
             const fs = require('fs')
