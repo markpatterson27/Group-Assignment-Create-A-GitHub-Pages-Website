@@ -37,20 +37,20 @@ When enabled, your site will be available at: `https://<org name>.github.io/<rep
 
 | <img alt="activity status" align="right" height="24" src="../../blob/status/.github/activity-icons/activity1.svg" /> :keyboard: Activity - Enable GitHub Pages |
 |:---|
-| Enable pages for this repo. Use the `main` branch and `/docs` folder for site contents. |
+| Enable pages for this repo. Use the `main` branch and `/docs` folder for site contents. The `/docs` folder already contains an `index.md` file for you to get started with. |
 
 | <img alt="activity status" align="right" height="24" src="../../blob/status/.github/activity-icons/activity2.svg" /> :keyboard: Activity - Make commit |
 |:---|
-| Each member in the team must make a commit that adds a new file. |
+| <p>Each member in the team must make a commit that adds a new file.</p><p>You can either use the editing tools on GitHub to do this, or clone this repository to your local computer, make the changes, commit them and push the commit back to GitHub.</p> |
 
 | <img alt="activity status" align="right" height="24" src="../../blob/status/.github/activity-icons/activity3.svg" /> :keyboard: Activity - Open Pull Request |
 |:---|
-| Each member in the team must open a pull request. |
+| Each member in the team must open a pull request. The pull request should include relevant proposed changes to the website. |
 
 | <img alt="activity status" align="right" height="24" src="../../blob/status/.github/activity-icons/activity4.svg" /> :keyboard: Activity - Review Pull Request |
 |:---|
-| Each member in the team must comment on someone else's pull request. |
+| Each member in the team must comment on someone else's pull request. The comment should be relevant to their proposed changes. |
 
 | <img alt="activity status" align="right" height="24" src="../../blob/status/.github/activity-icons/activity5.svg" /> :keyboard: Activity - Merge Commit |
 |:---|
-| Each member in the team must author a merge commit. |
+| <p>Each member in the team must author a merge commit.</p><p>Merges can be made, either by using GitHub's Pull Request feature, or locally and then pushed to the GitHub repository. Remember to resolve any merge conflicts before committing each merge.</p> |
