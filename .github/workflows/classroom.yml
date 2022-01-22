@@ -721,6 +721,7 @@ jobs:
         with:
           points: ${{ needs.grade.outputs.grading-score }}
           path: '.github/activity-icons/points-bar.svg'
+        continue-on-error: true
 
       # commit and push activity icons if statuses have changed
       - name: Commit changes
