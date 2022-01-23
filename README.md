@@ -1,4 +1,4 @@
-# Group Assignment - Create A GitHub Pages Website
+# :handshake: Group Assignment - Create A GitHub Pages Website
 
 <img alt="points bar" align="right" height="36" src="../../blob/status/.github/activity-icons/points-bar.svg" />
 
@@ -31,7 +31,7 @@ You will need to [enable GitHub Pages](https://docs.github.com/en/pages/getting-
 
 When enabled, your site will be available at: `https://<org name>.github.io/<repo name>`
 
-## Tasks
+## :dart: Tasks
 
 (You might need to refresh the page to see task completion statuses.)
 
