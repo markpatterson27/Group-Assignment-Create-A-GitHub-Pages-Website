@@ -14,7 +14,7 @@ activity1-fail-2: |
   (See [Configuring a publishing source for your GitHub Pages site](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site) for details on how to configure the correct publishing source.)
 activity2-success: Yay. Everyone in the team has added a file and made a commit.
 activity2-fail: |
-  Not everyone has made a commit. The following team members have not added made a commit that adds a file:
+  Not everyone has made a commit. The following team members have not made a commit that adds a file:
   \${no-commit-members}
   
   <details>
